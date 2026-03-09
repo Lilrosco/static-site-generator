@@ -18,20 +18,29 @@ class TestLeafNode(unittest.TestCase):
         self.node.props = self.props
         self.assertEqual(str(self.node), f"LeafNode(p, Hello, world!, {self.props})")
     
-    def test_to_html(self):
+    def test_to_html_raises_error_value_none(self):
         self.node.value = None
         with self.assertRaises(ValueError):
             self.node.to_html()
-
+    
+    def test_to_html_does_not_raise_error_value_empty(self):
         self.node.value = ""
-        with self.assertRaises(ValueError):
-            self.node.to_html()
+        self.node.to_html()
 
     def test_props_to_html_a(self):
         self.node.tag = "a"
         self.node.value = "Click me!"
         self.node.props = self.props
         self.assertEqual(self.node.to_html(), '<a href="https://www.google.com">Click me!</a>')
+    
+    def test_props_to_html_img(self):
+        self.node.tag = "img"
+        self.node.value = ""
+        self.node.props = {
+            "src": "some/file/location/img.jpg",
+            "alt": "Hello, world!"
+        }
+        self.assertEqual(self.node.to_html(), '<img src="some/file/location/img.jpg" alt="Hello, world!" />')
 
 
 if __name__ == "__main__":
