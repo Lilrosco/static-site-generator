@@ -46,6 +46,55 @@ This is the same paragraph on a new line
             ],
         )
 
+class BlockToBlockType(unittest.TestCase):
+    def test_block_to_block_types(self):
+            block = "# heading"
+            self.assertEqual(block_to_block_type(block), BlockType.HEADING)
+            block = "```\ncode\n```"
+            self.assertEqual(block_to_block_type(block), BlockType.CODE)
+            block = "> quote\n> more quote"
+            self.assertEqual(block_to_block_type(block), BlockType.QUOTE)
+            block = "- list\n- items"
+            self.assertEqual(block_to_block_type(block), BlockType.UNORDERED_LIST)
+            block = "1. list\n2. items"
+            self.assertEqual(block_to_block_type(block), BlockType.ORDERED_LIST)
+            block = "paragraph"
+            self.assertEqual(block_to_block_type(block), BlockType.PARAGRAPH)
+
+#     def test_headings(self):
+#         md = """
+# ##### Heading 5
+# #### Heading 4
+# ### Heading 3
+# ## Heading 2
+# # Heading
+# """
+#         blocks = markdown_to_blocks(md)
+
+#         for block in blocks:
+#             self.assertEqual(block_to_block_type(block), BlockType.HEADING)
+    
+#     def test_invalid_heading(self):
+#         block = "###Bad Heading"
+
+#         self.assertEqual(block_to_block_type(block), BlockType.PARAGRAPH)
+    
+#     def test_code(self):
+#         block = """
+# ```
+# print("Hello, world!")
+# ```
+# """
+
+#         self.assertEqual(block_to_block_type(block), BlockType.CODE)
+
+#     def test_quote(self):
+#         block = """
+# > This is a block quote.
+# """
+
+#         self.assertEqual(block_to_block_type(block), BlockType.QUOTE)
+
 
 if __name__ == "__main__":
     unittest.main()
