@@ -37,8 +37,8 @@ def copy_static_content_to_public():
 
 
 def main():
-    if len(sys.argv) > 0:
-        base_path = sys.argv[0]
+    if len(sys.argv) > 1:
+        base_path = sys.argv[1]
 
     copy_static_content_to_public()
     generate_pages_recursive(base_path, dir_path_content, template_path, dir_path_public)
