@@ -1,5 +1,4 @@
 import os
-import shutil
 
 from block_markdown import markdown_to_blocks, markdown_to_html_node
 
@@ -17,7 +16,7 @@ def extract_title(markdown):
 
     return header
 
-def generate_page(from_path, template_path, dest_path):
+def generate_page(base_path, from_path, template_path, dest_path):
     print(f"Generating page from {from_path} to {dest_path} using {template_path}")
 
     try:
@@ -35,6 +34,7 @@ def generate_page(from_path, template_path, dest_path):
     content = markdown_to_html_node(markdown).to_html()
     title = extract_title(markdown)
     html = template.replace("{{ Title }}", title).replace("{{ Content }}", content)
+    html = html.replace('href="/', f'href="{base_path}').replace('src="/', f'src="{base_path}')
 
     try:
         with open(dest_path, 'w') as dest_file:
@@ -42,7 +42,7 @@ def generate_page(from_path, template_path, dest_path):
     except Exception as e:
         print(f"An error occurred when writing file: {e}")
 
-def generate_pages_recursive(dir_path_content, template_path, dest_dir_path):
+def generate_pages_recursive(base_path, dir_path_content, template_path, dest_dir_path):
     for filename in os.listdir(dir_path_content):
         file_path = os.path.join(dir_path_content, filename)
         destination_path = os.path.join(dest_dir_path, filename)
@@ -50,8 +50,8 @@ def generate_pages_recursive(dir_path_content, template_path, dest_dir_path):
         if os.path.isfile(file_path):
             if filename[-3:] == ".md":
                 destination_path = os.path.join(dest_dir_path, filename.replace(".md", ".html"))
-                generate_page(file_path, template_path, destination_path)
+                generate_page(base_path, file_path, template_path, destination_path)
         elif os.path.isdir(file_path):
             print(f"Making sub directory: {destination_path}")
             os.mkdir(destination_path)
-            generate_pages_recursive(file_path, template_path, destination_path)
+            generate_pages_recursive(base_path, file_path, template_path, destination_path)

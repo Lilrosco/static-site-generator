@@ -1,11 +1,13 @@
 import os
 import shutil
+import sys
 
 from copycontents import recursive_contents_copy
-from gencontents import generate_page, generate_pages_recursive
+from gencontents import generate_pages_recursive
 
+base_path = "/"
 dir_path_static = "./static"
-dir_path_public = "./public"
+dir_path_public = "./docs"
 dir_path_content = "./content"
 template_path = "./template.html"
 
@@ -35,8 +37,11 @@ def copy_static_content_to_public():
 
 
 def main():
+    if len(sys.argv) > 0:
+        base_path = sys.argv[0]
+
     copy_static_content_to_public()
-    generate_pages_recursive(dir_path_content, template_path, dir_path_public)
+    generate_pages_recursive(base_path, dir_path_content, template_path, dir_path_public)
 
 if __name__ == "__main__":
     main()
